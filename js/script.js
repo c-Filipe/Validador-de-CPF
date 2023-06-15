@@ -6,32 +6,34 @@ $(document).ready(function(){
 function validaCPF(){
    const cpfFormatado= document.getElementById('cpf').value;
 
+   const resultado = document.getElementById('resultado');
+
    const cpf = limpaFormatacao(cpfFormatado);
   
     if(cpf.length !== 11){
-        mostraResultado('CPF deve conter 11 digitos', 'red');
+        mostraResultado(resultado,'CPF deve conter 11 digitos','erro');
         return;
     }
     if(verificaDigitosRepetidos(cpf)) {
-        mostraResultado('CPF não pode conter repetição do mesmo dígito.' , 'red');
+        mostraResultado(resultado ,'CPF não pode conter repetição do mesmo dígito.','erro' );
         return
     }
 
     const digito1 = calcularDigitoVerificador(cpf,1);
 
     if(!digito1) {
-        mostraResultado(`CPF Inválido - ${cpfFormatado}`, 'red');
+        mostraResultado(resultado,`CPF Inválido - ${cpfFormatado}` ,'erro');
         return;
     }
 
     const digito2 = calcularDigitoVerificador(cpf,2)
 
     if(!digito2) {
-        mostraResultado(`CPF Inválido - ${cpfFormatado}`, 'red');
+        mostraResultado(resultado, `CPF Inválido - ${cpfFormatado}`,'erro');
         return;
     }
 
-    mostraResultado(`CPF Válido - ${cpfFormatado}` , 'green');
+    mostraResultado(resultado ,`CPF Válido - ${cpfFormatado}`,'sucesso');
 
 }
 
@@ -59,10 +61,16 @@ function limpaFormatacao(cpf){
     return cpf
 }
 
-function mostraResultado(texto,cor){
-    const span = document.getElementById('resultado');
-    span.innerHTML = texto;
-    span.style.color = cor;
+
+function mostraResultado(input,texto,status){
+
+
+    const footer = input.parentElement;
+    const span = footer.querySelector("span");
+
+    span.innerText = texto;
+    footer.className = status;
+    
 }
 
 function verificaDigitosRepetidos(cpf){
